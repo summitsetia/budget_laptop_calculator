@@ -1,20 +1,37 @@
-def get_choice(prompt, options):
-    while True:
-        choice = input(prompt + " " + ", ".join(options) + " ")
-        if choice in options:
-            print("You chose", choice)
-            return choice
-        else:
-            print("Invalid choice. Please try again.")
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-type_list = ['gaming', 'programming', 'working', 'editing']
-type_choice = get_choice("Please choose one of the following options:", type_list)
+# create a new Chrome browser instance
+driver = webdriver.Chrome()
 
-ram_list = ['4GB', '8GB', '16GB', '32GB']
-ram_choice = get_choice("Please choose one of the following options:", ram_list)
+# navigate to pbtech.co.nz
+driver.get("https://www.pbtech.co.nz")
 
-storage_list = ['256GB', '512GB', '1TB']
-storage_choice = get_choice("Please choose one of the following options:", storage_list)
+# find the "Departments" menu and hover over it
+departments_menu = WebDriverWait(driver, 10).until(
+    EC.element_to_be_clickable((By.XPATH, "//a[@class='dropdown-toggle'][text()='Departments']"))
+)
+ActionChains(driver).move_to_element(departments_menu).perform()
 
-system_list = ['windows', 'macOS']
-system_choice = get_choice("Please choose one of the following options:", system_list)
+# find the "Computers" category and click it
+computers_category = WebDriverWait(driver, 10).until(
+    EC.element_to_be_clickable((By.XPATH, "//a[text()='Computers']"))
+)
+computers_category.click()
+
+# find the "Laptops" sub-category and click it
+laptops_submenu = WebDriverWait(driver, 10).until(
+    EC.element_to_be_clickable((By.XPATH, "//a[contains(text(),'Laptops')]"))
+)
+laptops_submenu.click()
+
+# wait for the laptops page to load
+WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.XPATH, "//h1[contains(text(),'Laptops')]"))
+)
+
+# close the browser
+driver.quit()
