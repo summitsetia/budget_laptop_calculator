@@ -1,3 +1,6 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
 print("Budget Laptop Calculator")
 
 print("Enter Below the Specifications You Require")
@@ -39,14 +42,31 @@ system_choice = get_choice("Please choose one of the following options:", system
 # the amount of RAM they want, the amount of storage they want, and the operating system they want.
 # It stores each choice in a separate variable for later use.
 
-from selenium import webdriver
 
 # create a new Chrome browser instance
 driver = webdriver.Chrome()
 
 # navigate to Google
-driver.get("https://www.pbtech.co.nz/")
+driver.get("https://www.pbtech.co.nz/category/computers/laptops/shop-all")
+
+driver.maximize_window()
+# find the element by its id
+
+filters = driver.find_element(By.CLASS_NAME, "maxFilters")
+
+# do something with the element
+filters.click()
+
+dropdown = driver.find_element(By.CLASS_NAME, "ui-dropdownchecklist-selector")
+dropdown.click()
+
+mac_checkbox = driver.find_element(By.ID, "ddcl-filter_brand-i2")
+mac_checkbox.click()
+
+
 
 # keep the browser window open
 input("Press enter to close the browser...")
 driver.quit()
+
+
