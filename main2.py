@@ -5,19 +5,21 @@ from selenium.webdriver.common.keys import Keys
 import time
 from bs4 import BeautifulSoup
 
-print("Laptop Calculator")
+sleep = 3
+remove_unit = -2
 
+print("Laptop Calculator")
 print("Enter Below the Specifications You Require")
 print("  ")
 
 # This section of code just prints out some text to the console
 # welcoming the user to the laptop calculator and asking them to input their desired specifications.
-
 # trial reading information from an existing csv file locally store
 # trial reading a file that gets updated remotely online
 # trial using an API with this information  - example Google Map API, chatGPT API
 # webscraping using BeautifulSoup library in Python - select a website, store information in a file
 # add .upper() make it lowercase
+
 
 def get_choice(prompt, options):
     while True:
@@ -27,7 +29,6 @@ def get_choice(prompt, options):
             return choice
         else:
             print("Invalid choice. Please try again.")
-
 
 # This is a function that takes a prompt and a list of options as inputs, and returns the user's choice from the list.
 # It loops until the user inputs a valid option,
@@ -64,6 +65,7 @@ system_choice = get_choice(
     "Please choose one of the operating system following options:", system_list
 )
 
+print("now directing you to PB Technology...")
 
 # This section of code uses the get_choice() function to prompt the user to choose from lists of options
 # for the type of laptop they want (e.g. gaming, programming),
@@ -107,11 +109,11 @@ else:
 
 # This code section is used to adjust the RAM slider on the webpage
 # Find the RAM slider on the webpage by its ID
-ram_slider = driver.find_element(By.ID, "sf51")
+memory_slider = driver.find_element(By.ID, "sf51")
 
 # Convert the memory choice string to an integer (removing "GB" from the end of the string)
-memory_size_min = int(memory_min_choice[:-2])
-memory_size_max = int(memory_max_choice[:-2])
+memory_size_min = int(memory_min_choice[:remove_unit])
+memory_size_max = int(memory_max_choice[:remove_unit])
 
 # Define a list of available memory options (in GB)
 memory_options = [4, 8, 12, 16, 20, 24, 32, 40, 64]
@@ -123,7 +125,7 @@ timesToPressRightArrowKey_memory = memory_options.index(memory_size_min)
 timesToPressLeftArrowKey_memory = 8 - memory_options.index(memory_size_max)
 
 # Find the minimum handle of the RAM slider
-minhandle_memory = ram_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
+minhandle_memory = memory_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
 # Click on the minimum handle to activate it
 ActionChains(driver).click(minhandle_memory).perform()
 
@@ -132,7 +134,7 @@ for i in range(timesToPressRightArrowKey_memory):
     ActionChains(driver).send_keys(Keys.ARROW_RIGHT).perform()
 
     # Find the maximum handle of the RAM slider
-maxhandle_memory = ram_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[1]
+maxhandle_memory = memory_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[1]
 
 # Click on the maximum handle to activate it
 ActionChains(driver).click(maxhandle_memory).perform()
@@ -145,8 +147,8 @@ for i in range(timesToPressLeftArrowKey_memory):
 SSD_slider = driver.find_element(By.ID, "sf57")
 
 # this line converts the last two characters of a string  to an integer and assigns it to the SSD_size variable
-SSD_size_min = int(SSD_min_choice[:-2])
-SSD_size_max = int(SSD_max_choice[:-2])
+SSD_size_min = int(SSD_min_choice[:remove_unit])
+SSD_size_max = int(SSD_max_choice[:remove_unit])
 
 # This is a list of SSD storage capacity options in GB
 SSD_options = [
@@ -197,8 +199,8 @@ for i in range(timesToPressLeftArrowKey_SSD):
 screen_slider = driver.find_element(By.ID, "sf211")
 
 # The next two lines extract the min and max screen sizes from the user's input,stored in the screen_choice variable.
-min_screen_size = int(screen_min_choice[:2])
-max_screen_size = int(screen_max_choice[-2:])
+min_screen_size = int(screen_min_choice)
+max_screen_size = int(screen_max_choice)
 
 # The screen_options list contains all the available screen size options in inches.
 # The index of the minimum and maximum screen sizes in this list is calculated to determine how many arrow key presses
@@ -232,7 +234,7 @@ screen_options = [
 # The next block of code locates the slider handles and uses the ActionChains class from Selenium to perform a series
 # of arrow key presses to set the slider to the desired range.
 timesToPressRightArrowKey_size = screen_options.index(min_screen_size)
-timesToPressLeftArrowKey_size = 24 - screen_options.index(max_screen_size)
+timesToPressLeftArrowKey_size = 23 - screen_options.index(max_screen_size)
 minhandle_size = screen_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
 ActionChains(driver).click(minhandle_size).perform()
 for i in range(timesToPressRightArrowKey_size):
@@ -252,7 +254,7 @@ apply_filter = driver.find_element(
 # The next line of code clicks on the button using the click() method of the WebElement object.
 apply_filter.click()
 # After clicking the button, the code waits for 3 seconds using the time.sleep() function.
-time.sleep(3)
+time.sleep(sleep)
 page_source = driver.page_source
 
 
@@ -269,5 +271,3 @@ for laptop in laptops:
 
 input("Press enter to close the browser...")
 driver.quit()
-
-
