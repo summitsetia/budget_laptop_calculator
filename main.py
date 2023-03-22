@@ -106,5 +106,19 @@ ActionChains(driver).click(maxhandlem).perform()
 for i in range(timesToPressLeftArrowKeym):
     ActionChains(driver).send_keys(Keys.LEFT).perform()
 
+screen_slider = driver.find_element(By.ID, "sf211")
+screen_size = int(screen_choice)
+screen_options = [10, 10.1, 11.6, 12, 12.3, 12.4, 12.5, 13, 13.3, 13.4, 13.5, 13.6, 13.9, 14, 14.1, 14.4, 15, 15.1, 15.6, 16, 16.1, 17, 17.3, 18]
+timesToPressRightArrowKeys = screen_options.index(screen_size)
+timesToPressLeftArrowKeys = 23 - screen_options.index(screen_size)
+minhandles = screen_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
+ActionChains(driver).click(minhandles).perform()
+for i in range(timesToPressRightArrowKeys):
+    ActionChains(driver).send_keys(Keys.ARROW_RIGHT).perform()
+maxhandles = screen_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[1]
+ActionChains(driver).click(maxhandles).perform()
+for i in range(timesToPressLeftArrowKeys):
+    ActionChains(driver).send_keys(Keys.LEFT).perform()
+
 input("Press enter to close the browser...")
 driver.quit()
