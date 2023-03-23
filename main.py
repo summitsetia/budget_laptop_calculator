@@ -185,20 +185,18 @@ apply_filter = driver.find_element(
 )
 apply_filter.click()
 
-input("Press enter to close the browser...")
-driver.quit()
-
 filtered_page_html = driver.page_source
 
 # Parse the HTML using BeautifulSoup
 soup = BeautifulSoup(filtered_page_html, 'html.parser')
 
-print(soup)
+input("Press enter to close the browser...")
+driver.quit()
 
-# # Find the laptops that match the user's specifications
-# results = soup.find(id='main_container')
-# laptops = results.find_all('h2', class_='np_title')
-#
-# # Print the laptop names
-# for laptop in laptops:
-#     print(laptop.text)
+# Find the laptops that match the user's specifications
+results = soup.find(id='main_container')
+laptops = results.find_all('h2', class_='np_title')
+
+# Print the laptop names
+for laptop in laptops:
+    print(laptop.text)
