@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
-import requests
+import time
 from bs4 import BeautifulSoup
 
 print("Budget Laptop Calculator")
@@ -184,14 +184,12 @@ apply_filter = driver.find_element(
     By.XPATH, "//button[@class='orange xsmall py-2 py-md-1 right']"
 )
 apply_filter.click()
+time.sleep(3)
+page_source = driver.page_source
 
-filtered_page_html = driver.page_source
 
 # Parse the HTML using BeautifulSoup
-soup = BeautifulSoup(filtered_page_html, 'html.parser')
-
-input("Press enter to close the browser...")
-driver.quit()
+soup = BeautifulSoup(page_source, 'html.parser')
 
 # Find the laptops that match the user's specifications
 results = soup.find(id='main_container')
@@ -200,3 +198,6 @@ laptops = results.find_all('h2', class_='np_title')
 # Print the laptop names
 for laptop in laptops:
     print(laptop.text)
+
+input("Press enter to close the browser...")
+driver.quit()
