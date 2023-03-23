@@ -34,7 +34,7 @@ def get_choice(prompt, options):
 memory_list = ['8GB', '16GB', '32GB', '64GB']
 memory_choice = get_choice("Please choose one of the following memory options:", memory_list)
 
-screen_list = ['10', '12', '14', '16', '18']
+screen_list = ['10-12', '12-14', '14-16', '16-18']
 screen_choice = get_choice("Please choose one of the following screen size options (inches):", screen_list)
 
 SSD_list = ['32GB', '64GB', '256GB', '512GB', '1000GB']
@@ -62,18 +62,21 @@ driver.maximize_window()
 filters = driver.find_element(By.CLASS_NAME, "maxFilters")
 filters.click()
 
-if system_choice == 'macOS':
-    dropdown = driver.find_elements(By.CLASS_NAME, "ui-dropdownchecklist-selector")
-    dropdown[4].click()
+# if system_choice == 'macOS':
+#     dropdown = driver.find_elements(By.CLASS_NAME, "ui-dropdownchecklist-selector")
+#     dropdown[4].click()
+#
+#     mac_checkbox = driver.find_element(By.ID, "ddcl-filter_22[]-i2")
+#     mac_checkbox.click()
+# else:
+#     dropdown = driver.find_elements(By.CLASS_NAME, "ui-dropdownchecklist-selector")
+#     dropdown[4].click()
 
-    mac_checkbox = driver.find_element(By.ID, "ddcl-filter_22[]-i2")
-    mac_checkbox.click()
-else:
-    dropdown = driver.find_elements(By.CLASS_NAME, "ui-dropdownchecklist-selector")
-    dropdown[4].click()
+    # windowsIds = ["2391", "421", "190", "477", "819", "7546", "2012", "7546", "3645", "3186", "3278", "4246", "7544", "7548", "7545", "7737"]
 
-    windows_checkbox = driver.find_element(By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="2391"]')
-    windows_checkbox.click()
+    # for id in windowsIds:
+    #     windows_checkbox = driver.find_element(By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="2391"]')
+    #     windows_checkbox.click()
 
 
 
@@ -94,7 +97,25 @@ for i in range(timesToPressLeftArrowKey):
 
 SSD_slider = driver.find_element(By.ID, "sf57")
 SSD_size = int(SSD_choice[:-2])
-SSD_options = [32, 64, 128, 192, 250, 256, 300, 500, 512, 750, 1000, 1024, 1200, 1500, 2000, 2500, 4000]
+SSD_options = [
+    32,
+    64,
+    128,
+    192,
+    250,
+    256,
+    300,
+    500,
+    512,
+    750,
+    1000,
+    1024,
+    1200,
+    1500,
+    2000,
+    2500,
+    4000,
+]
 timesToPressRightArrowKeym = SSD_options.index(SSD_size)
 timesToPressLeftArrowKeym = 16 - SSD_options.index(SSD_size)
 minhandlem = SSD_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
@@ -107,10 +128,38 @@ for i in range(timesToPressLeftArrowKeym):
     ActionChains(driver).send_keys(Keys.LEFT).perform()
 
 screen_slider = driver.find_element(By.ID, "sf211")
-screen_size = int(screen_choice)
-screen_options = [10, 10.1, 11.6, 12, 12.3, 12.4, 12.5, 13, 13.3, 13.4, 13.5, 13.6, 13.9, 14, 14.1, 14.4, 15, 15.1, 15.6, 16, 16.1, 17, 17.3, 18]
-timesToPressRightArrowKeys = screen_options.index(screen_size)
-timesToPressLeftArrowKeys = 23 - screen_options.index(screen_size)
+# screen_size = int(screen_choice[:-3])
+min_screen_size = int(screen_choice[:2])
+max_screen_size = int(screen_choice[-2:])
+
+screen_options = [
+    10,
+    10.1,
+    11.6,
+    12,
+    12.3,
+    12.4,
+    12.5,
+    13,
+    13.3,
+    13.4,
+    13.5,
+    13.6,
+    13.9,
+    14,
+    14.1,
+    14.4,
+    15,
+    15.1,
+    15.6,
+    16,
+    16.1,
+    17,
+    17.3,
+    18,
+]
+timesToPressRightArrowKeys = screen_options.index(min_screen_size)
+timesToPressLeftArrowKeys = 23 - screen_options.index(max_screen_size)
 minhandles = screen_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
 ActionChains(driver).click(minhandles).perform()
 for i in range(timesToPressRightArrowKeys):
@@ -119,6 +168,11 @@ maxhandles = screen_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[1]
 ActionChains(driver).click(maxhandles).perform()
 for i in range(timesToPressLeftArrowKeys):
     ActionChains(driver).send_keys(Keys.LEFT).perform()
+
+apply_filter = driver.find_element(
+    By.XPATH, "//button[@class='orange xsmall py-2 py-md-1 right']"
+)
+apply_filter.click()
 
 input("Press enter to close the browser...")
 driver.quit()

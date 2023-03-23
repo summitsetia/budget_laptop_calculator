@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
-
 print("Budget Laptop Calculator")
 
 print("Enter Below the Specifications You Require")
@@ -38,25 +37,20 @@ memory_choice = get_choice(
     "Please choose one of the following memory options:", memory_list
 )
 
-screen_list = ["10", "12", "14", "16", "18"]
+screen_list = ["10-12", "12-14", "14-16", "16-18"]
 screen_choice = get_choice(
-#     "Please choose one of the following screen size options (inches):", screen_list
-# )
+    "Please choose one of the following screen size options (inches):", screen_list
+)
 
-# SSD_list = ["32GB", "64GB", "256GB", "512GB", "1TB"]
-# SSD_choice = get_choice(
-#     "Please choose one of the following SSD storage options:", SSD_list
-# )
+SSD_list = ["32GB", "64GB", "256GB", "512GB", "1000GB"]
+SSD_choice = get_choice(
+    "Please choose one of the following SSD storage options:", SSD_list
+)
 
-# system_list = ["windows", "macOS"]
-# system_choice = get_choice(
-#     "Please choose one of the operating system following options:", system_list
-# )
-
-# memory_choice = "8GB"
-screen_choice = "14"
-SSD_choice = "256GB"
-system_choice = "macOS"
+system_list = ["windows", "macOS"]
+system_choice = get_choice(
+    "Please choose one of the operating system following options:", system_list
+)
 
 
 # This section of code uses the get_choice() function to prompt the user to choose from lists of options
@@ -77,8 +71,6 @@ driver.maximize_window()
 filters = driver.find_element(By.CLASS_NAME, "maxFilters")
 filters.click()
 
-# Select operating system
-
 if system_choice == "macOS":
     dropdown = driver.find_elements(By.CLASS_NAME, "ui-dropdownchecklist-selector")
     dropdown[4].click()
@@ -94,37 +86,174 @@ else:
     )
     windows_checkbox.click()
 
-## Select ram
-slider = driver.find_element(By.ID, "sf51")
+    chromebook_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="421"]'
+    )
+    chromebook_checkbox.click()
 
-# Figures out how many times left/right arrow key will need to be pressed
-# Converts chosen memory into integer
+    windows_7_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="190"]'
+    )
+    windows_7_checkbox.click()
+
+    windows_8_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="477"]'
+    )
+    windows_8_checkbox.click()
+
+    windows_10_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="819"]'
+    )
+    windows_10_checkbox.click()
+
+    windows_10_11_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="7546"]'
+    )
+    windows_10_11_checkbox.click()
+
+    windows_10_pro_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="2012"]'
+    )
+    windows_10_pro_checkbox.click()
+
+    windows_10_11_pro_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="7546"]'
+    )
+    windows_checkbox.click()
+
+    windows_10_pro_national_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="3645"]'
+    )
+    windows_10_pro_national_checkbox.click()
+
+    windows_10_s_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="3186"]'
+    )
+    windows_10_s_checkbox.click()
+
+    windows_10_enterprise_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="3278"]'
+    )
+    windows_10_enterprise_checkbox.click()
+
+    windows_10_lot_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="4246"]'
+    )
+    windows_10_lot_checkbox.click()
+
+    windows_11_home_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="7544"]'
+    )
+    windows_11_home_checkbox.click()
+
+    windows_11_home_s_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="7548"]'
+    )
+    windows_11_home_s_checkbox.click()
+
+    windows_11_pro_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="7545"]'
+    )
+    windows_11_pro_checkbox.click()
+
+    windows_11_pro_national_checkbox = driver.find_element(
+        By.CSS_SELECTOR, 'input[id*="ddcl-filter_22"][value="7737"]'
+    )
+    windows_11_pro_national_checkbox.click()
+
+
+ram_slider = driver.find_element(By.ID, "sf51")
 memory_size = int(memory_choice[:-2])
 memory_options = [4, 8, 12, 16, 20, 24, 32, 40, 64]
 timesToPressRightArrowKey = memory_options.index(memory_size)
 timesToPressLeftArrowKey = 8 - memory_options.index(memory_size)
-
-# Slecting lowerbound
-minhandle = slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
-
-# Click on the slider handle to activate it
+minhandle = ram_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
 ActionChains(driver).click(minhandle).perform()
-
-# Press the right arrow key 5 times
 for i in range(timesToPressRightArrowKey):
     ActionChains(driver).send_keys(Keys.ARROW_RIGHT).perform()
-
-# Selecting upperbound
-maxhandle = slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[1]
-
-# Click on the slider handle to activate it
+maxhandle = ram_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[1]
 ActionChains(driver).click(maxhandle).perform()
-
-# Press the right arrow key 5 times
 for i in range(timesToPressLeftArrowKey):
     ActionChains(driver).send_keys(Keys.LEFT).perform()
 
 
-# keep the browser window open
-input("Press enter to close the browser...")
+SSD_slider = driver.find_element(By.ID, "sf57")
+SSD_size = int(SSD_choice[:-2])
+SSD_options = [
+    32,
+    64,
+    128,
+    192,
+    250,
+    256,
+    300,
+    500,
+    512,
+    750,
+    1000,
+    1024,
+    1200,
+    1500,
+    2000,
+    2500,
+    4000,
+]
+timesToPressRightArrowKeym = SSD_options.index(SSD_size)
+timesToPressLeftArrowKeym = 16 - SSD_options.index(SSD_size)
+minhandlem = SSD_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
+ActionChains(driver).click(minhandlem).perform()
+for i in range(timesToPressRightArrowKeym):
+    ActionChains(driver).send_keys(Keys.ARROW_RIGHT).perform()
+maxhandlem = SSD_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[1]
+ActionChains(driver).click(maxhandlem).perform()
+for i in range(timesToPressLeftArrowKeym):
+    ActionChains(driver).send_keys(Keys.LEFT).perform()
 
+screen_slider = driver.find_element(By.ID, "sf211")
+min_screen_size = int(screen_choice[:2])
+max_screen_size = int(screen_choice[-2:])
+
+screen_options = [
+    10,
+    10.1,
+    11.6,
+    12,
+    12.3,
+    12.4,
+    12.5,
+    13,
+    13.3,
+    13.4,
+    13.5,
+    13.6,
+    13.9,
+    14,
+    14.1,
+    14.4,
+    15,
+    15.1,
+    15.6,
+    16,
+    16.1,
+    17,
+    17.3,
+    18,
+]
+timesToPressRightArrowKeys = screen_options.index(min_screen_size)
+timesToPressLeftArrowKeys = 23 - screen_options.index(max_screen_size)
+minhandles = screen_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
+ActionChains(driver).click(minhandles).perform()
+for i in range(timesToPressRightArrowKeys):
+    ActionChains(driver).send_keys(Keys.ARROW_RIGHT).perform()
+maxhandles = screen_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[1]
+ActionChains(driver).click(maxhandles).perform()
+for i in range(timesToPressLeftArrowKeys):
+    ActionChains(driver).send_keys(Keys.LEFT).perform()
+
+apply_filter = driver.find_element(
+    By.XPATH, "//button[@class='orange xsmall py-2 py-md-1 right']"
+)
+apply_filter.click()
+
+input("Press enter to close the browser...")
+driver.quit()
