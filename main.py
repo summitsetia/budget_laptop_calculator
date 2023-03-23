@@ -5,13 +5,13 @@ from selenium.webdriver.common.keys import Keys
 import time
 from bs4 import BeautifulSoup
 
-print("Budget Laptop Calculator")
+print("Laptop Calculator")
 
 print("Enter Below the Specifications You Require")
 print("  ")
 
 # This section of code just prints out some text to the console
-# welcoming the user to the budget laptop calculator and asking them to input their desired specifications.
+# welcoming the user to the laptop calculator and asking them to input their desired specifications.
 
 # trial reading information from an existing csv file locally store
 # trial reading a file that gets updated remotely online
@@ -71,43 +71,72 @@ driver.get(website)
 driver.maximize_window()
 # find the element by its id
 
+# Find the "maxFilters" element and click on it to show the filter dropdown
 filters = driver.find_element(By.CLASS_NAME, "maxFilters")
 filters.click()
 
+# Check the system choice and select the corresponding OS from the dropdown
 if system_choice == "macOS":
     dropdown = driver.find_elements(By.CLASS_NAME, "ui-dropdownchecklist-selector")
     dropdown[4].click()
 
+    # Find and click the checkbox for macOS
     mac_checkbox = driver.find_element(By.ID, "ddcl-filter_22[]-i2")
     mac_checkbox.click()
 else:
+    # For non-macOS systems, click on the OS dropdown and select the "Windows" option
     dropdown = driver.find_elements(By.CLASS_NAME, "ui-dropdownchecklist-selector")
     dropdown[4].click()
 
-    windowsIds = ["2391", "421", "190", "477", "819", "7546", "2012", "7546", "3645", "3186", "3278", "4246", "7544", "7548", "7545", "7737"]
-
+    # Find and click the checkboxes for each Windows version in the "windowsIds" list
+    windowsIds = ["2391", "421", "190", "477", "819", "7546", "2012", "7546", "3645", "3186", "3278", "4246", "7544",
+                  "7548", "7545", "7737"]
     for windows in windowsIds:
         windows_checkbox = driver.find_element(By.CSS_SELECTOR, f'input[id*="ddcl-filter_22"][value="{windows}"]')
         windows_checkbox.click()
 
-
+# This code section is used to adjust the RAM slider on the webpage
+# Find the RAM slider on the webpage by its ID
 ram_slider = driver.find_element(By.ID, "sf51")
+
+# Convert the memory choice string to an integer (removing "GB" from the end of the string)
 memory_size = int(memory_choice[:-2])
+
+# Define a list of available memory options (in GB)
 memory_options = [4, 8, 12, 16, 20, 24, 32, 40, 64]
+
+# Determine how many times to press the right arrow key to reach the desired memory size
 timesToPressRightArrowKey = memory_options.index(memory_size)
+
+# Determine how many times to press the left arrow key to set the maximum memory size to 64 G
 timesToPressLeftArrowKey = 8 - memory_options.index(memory_size)
+
+# Find the minimum handle of the RAM slider
 minhandle = ram_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
+# Click on the minimum handle to activate it
 ActionChains(driver).click(minhandle).perform()
+
+# Use a loop to press the right arrow key the appropriate number of times to set the desired memory size
 for i in range(timesToPressRightArrowKey):
     ActionChains(driver).send_keys(Keys.ARROW_RIGHT).perform()
+
+    # Find the maximum handle of the RAM slider
 maxhandle = ram_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[1]
+
+# Click on the maximum handle to activate it
 ActionChains(driver).click(maxhandle).perform()
+
+# Use a loop to press the left arrow key the appropriate number of times to set the maximum memory size to 64 GB
 for i in range(timesToPressLeftArrowKey):
     ActionChains(driver).send_keys(Keys.LEFT).perform()
 
-
+# This line finds an HTML element on a webpage using its ID attribute and assigns it to the SSD_slider variable
 SSD_slider = driver.find_element(By.ID, "sf57")
+
+# this line converts the last two characters of a string  to an integer and assigns it to the SSD_size variable
 SSD_size = int(SSD_choice[:-2])
+
+# This is a list of SSD storage capacity options in GB
 SSD_options = [
     32,
     64,
@@ -127,22 +156,41 @@ SSD_options = [
     2500,
     4000,
 ]
+# This line finds the index of the SSD size option in the SSD_options list and assigns the result to variable
 timesToPressRightArrowKeym = SSD_options.index(SSD_size)
+
+# This line calculates the number of times the left arrow key should be pressed to reach the SSD size option
 timesToPressLeftArrowKeym = 16 - SSD_options.index(SSD_size)
+
+# This line finds the first slider handle element within the_slider element and assigns it to the minhandlem variable
 minhandlem = SSD_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
+
+# This line clicks on the minhandlem element using the ActionChains class from the Selenium library
 ActionChains(driver).click(minhandlem).perform()
+
+# This loop presses the right arrow key on keyboard timesToPressRightArrowKeym number of times using ActionChains class
 for i in range(timesToPressRightArrowKeym):
     ActionChains(driver).send_keys(Keys.ARROW_RIGHT).perform()
+
+# This line finds the second slider handle element within SSD_slider element and assigns it to the maxhandlem variable
 maxhandlem = SSD_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[1]
+# This line clicks on the maxhandlem element using the ActionChains class
 ActionChains(driver).click(maxhandlem).perform()
+# This loop presses the left arrow key on keyboard timeToPressLeftArrowKeym amount of times using actionchain class
 for i in range(timesToPressLeftArrowKeym):
     ActionChains(driver).send_keys(Keys.LEFT).perform()
 
+# This code uses Selenium WebDriver to interact with a web page slider element, specifically a screen size slider.
+# The first line finds the slider element using its ID and assigns it to the screen_slider variable.
 screen_slider = driver.find_element(By.ID, "sf211")
-# screen_size = int(screen_choice[:-3])
+
+# The next two lines extract the min and max screen sizes from the user's input,stored in the screen_choice variable.
 min_screen_size = int(screen_choice[:2])
 max_screen_size = int(screen_choice[-2:])
 
+# The screen_options list contains all the available screen size options in inches.
+# The index of the minimum and maximum screen sizes in this list is calculated to determine how many arrow key presses
+# are required to set the slider to the desired range.
 screen_options = [
     10,
     10.1,
@@ -169,6 +217,8 @@ screen_options = [
     17.3,
     18,
 ]
+# The next block of code locates the slider handles and uses the ActionChains class from Selenium to perform a series
+# of arrow key presses to set the slider to the desired range.
 timesToPressRightArrowKeys = screen_options.index(min_screen_size)
 timesToPressLeftArrowKeys = 23 - screen_options.index(max_screen_size)
 minhandles = screen_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
@@ -176,14 +226,20 @@ ActionChains(driver).click(minhandles).perform()
 for i in range(timesToPressRightArrowKeys):
     ActionChains(driver).send_keys(Keys.ARROW_RIGHT).perform()
 maxhandles = screen_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[1]
+# This code uses the ActionChains class from the Selenium WebDriver library to perform some actions on a web page.
 ActionChains(driver).click(maxhandles).perform()
+
+#  This code creates a loop that will run a number of times, as specified by the variable "timesToPressLeftArrowKeys".
 for i in range(timesToPressLeftArrowKeys):
     ActionChains(driver).send_keys(Keys.LEFT).perform()
 
+# This code finds a web element using Selenium WebDriver and clicks on it.
 apply_filter = driver.find_element(
     By.XPATH, "//button[@class='orange xsmall py-2 py-md-1 right']"
 )
+# The next line of code clicks on the button using the click() method of the WebElement object.
 apply_filter.click()
+# After clicking the button, the code waits for 3 seconds using the time.sleep() function.
 time.sleep(3)
 page_source = driver.page_source
 
