@@ -117,12 +117,12 @@ memory_size_max = int(memory_max_choice[:remove_unit])
 
 # Define a list of available memory options (in GB)
 memory_options = [4, 8, 12, 16, 20, 24, 32, 40, 64]
-
+memory_options_count = len(memory_options)
 # Determine how many times to press the right arrow key to reach the desired memory size
 timesToPressRightArrowKey_memory = memory_options.index(memory_size_min)
 
 # Determine how many times to press the left arrow key to set the maximum memory size to 64 G
-timesToPressLeftArrowKey_memory = 8 - memory_options.index(memory_size_max)
+timesToPressLeftArrowKey_memory = memory_options_count - memory_options.index(memory_size_max) - 1
 
 # Find the minimum handle of the RAM slider
 minhandle_memory = memory_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
@@ -151,30 +151,13 @@ SSD_size_min = int(SSD_min_choice[:remove_unit])
 SSD_size_max = int(SSD_max_choice[:remove_unit])
 
 # This is a list of SSD storage capacity options in GB
-SSD_options = [
-    32,
-    64,
-    128,
-    192,
-    250,
-    256,
-    300,
-    500,
-    512,
-    750,
-    1000,
-    1024,
-    1200,
-    1500,
-    2000,
-    2500,
-    4000,
-]
+SSD_options = [32, 64, 128, 192, 250, 256, 300, 500, 512, 750, 1000, 1024, 1200, 1500, 2000, 2500, 4000]
+SSD_options_count = len(SSD_options)
 # This line finds the index of the SSD size option in the SSD_options list and assigns the result to variable
 timesToPressRightArrowKey_SSD = SSD_options.index(SSD_size_min)
 
 # This line calculates the number of times the left arrow key should be pressed to reach the SSD size option
-timesToPressLeftArrowKey_SSD = 16 - SSD_options.index(SSD_size_max)
+timesToPressLeftArrowKey_SSD = SSD_options_count - SSD_options.index(SSD_size_max) - 1
 
 # This line finds the first slider handle element within the_slider element and assigns it to the minhandle_SSD variable
 minhandle_SSD = SSD_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
@@ -205,36 +188,13 @@ max_screen_size = int(screen_max_choice)
 # The screen_options list contains all the available screen size options in inches.
 # The index of the minimum and maximum screen sizes in this list is calculated to determine how many arrow key presses
 # are required to set the slider to the desired range.
-screen_options = [
-    10,
-    10.1,
-    11.6,
-    12,
-    12.3,
-    12.4,
-    12.5,
-    13,
-    13.3,
-    13.4,
-    13.5,
-    13.6,
-    13.9,
-    14,
-    14.1,
-    14.4,
-    15,
-    15.1,
-    15.6,
-    16,
-    16.1,
-    17,
-    17.3,
-    18,
-]
+screen_options = [10, 10.1, 11.6, 12, 12.3, 12.4, 12.5, 13, 13.3, 13.4, 13.5, 13.6, 13.9, 14, 14.1, 14.4, 14.5, 15,
+                  15.1, 15.6, 16, 16.1, 17, 17.3, 18, 23]
+screen_options_count = len(screen_options)
 # The next block of code locates the slider handles and uses the ActionChains class from Selenium to perform a series
 # of arrow key presses to set the slider to the desired range.
 timesToPressRightArrowKey_size = screen_options.index(min_screen_size)
-timesToPressLeftArrowKey_size = 23 - screen_options.index(max_screen_size)
+timesToPressLeftArrowKey_size = screen_options_count - screen_options.index(max_screen_size) - 1
 minhandle_size = screen_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
 ActionChains(driver).click(minhandle_size).perform()
 for i in range(timesToPressRightArrowKey_size):
@@ -264,10 +224,13 @@ soup = BeautifulSoup(page_source, 'html.parser')
 # Find the laptops that match the user's specifications
 results = soup.find(id='main_container')
 laptops = results.find_all('h2', class_='np_title')
+prices = results.find_all(class_='price-dollar hide-plain')
 
-# Print the laptop names
-for laptop in laptops:
-    print(laptop.text)
+print("  ")
+
+for laptop, price in zip(laptops, prices):
+    print(laptop.text, price.text)
+    print()
 
 input("Press enter to close the browser...")
 driver.quit()

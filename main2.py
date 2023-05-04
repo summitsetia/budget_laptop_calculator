@@ -271,3 +271,4 @@ for laptop in laptops:
 
 input("Press enter to close the browser...")
 driver.quit()
+
