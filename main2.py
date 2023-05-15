@@ -36,34 +36,54 @@ def get_choice(prompt, options):
 
 
 memory_list = ["8GB", "16GB", "32GB", "64GB"]
-memory_min_choice = get_choice(
-    "Please choose the minimum value for one of the following memory options:", memory_list
-)
-memory_max_choice = get_choice(
-    "Please choose the maximum value from one of the following memory options:", memory_list
-)
+
+
+while True:
+    memory_min_choice = get_choice("Please choose the minimum value for one of the following memory options:",
+                                   memory_list)
+    memory_max_choice = get_choice("Please choose the maximum value from one of the following memory options:",
+                                   memory_list)
+
+    memory_size_min = int(memory_min_choice[:remove_unit])
+    memory_size_max = int(memory_max_choice[:remove_unit])
+
+    if memory_size_min <= memory_size_max:
+        break
+    print("Invalid choice. The minimum value cannot be greater than the maximum value. Please try again.")
+
 
 screen_list = ["10", "12", "14", "16", "18"]
-screen_min_choice = get_choice(
-    "Please choose the minimum value for one of the following screen size options (inches):", screen_list
-)
-screen_max_choice = get_choice(
-    "Please choose the maximum value for one of the following screen size options (inches):", screen_list
-)
+while True:
+    screen_min_choice = get_choice("Please choose the minimum value for one of the following screen size options "
+                                   "(inches):", screen_list)
+    screen_max_choice = get_choice("Please choose the maximum value for one of the following screen size options"
+                                   " (inches):", screen_list)
+
+    screen_size_min = int(screen_min_choice)
+    screen_size_max = int(screen_max_choice)
+
+    if screen_size_min <= memory_size_max:
+        break
+print("Invalid choice. The minimum value cannot be greater than the maximum value. Please try again.")
 
 
 SSD_list = ["32GB", "64GB", "256GB", "512GB", "1000GB"]
-SSD_min_choice = get_choice(
-    "Please choose the minimum value for one of the following SSD storage options:", SSD_list
-)
-SSD_max_choice = get_choice(
-    "Please choose the maximum value one of the following SSD storage options:", SSD_list
-)
+while True:
+    SSD_min_choice = get_choice("Please choose the minimum value for one of the following SSD storage options:",
+                                SSD_list)
+    SSD_max_choice = get_choice("Please choose the maximum value one of the following SSD storage options:",
+                                SSD_list)
+
+    SSD_size_min = int(SSD_min_choice[:remove_unit])
+    SSD_size_max = int(SSD_max_choice[:remove_unit])
+
+    if SSD_size_min <= SSD_size_max:
+        break
+    print("Invalid choice. The minimum value cannot be greater than the maximum value. Please try again.")
 
 system_list = ["WINDOWS", "MACOS"]
-system_choice = get_choice(
-    "Please choose one of the operating system following options:", system_list
-)
+system_choice = get_choice("Please choose one of the operating system following options:",
+                           system_list)
 
 print("now directing you to PB Technology...")
 
@@ -111,10 +131,6 @@ else:
 # Find the RAM slider on the webpage by its ID
 memory_slider = driver.find_element(By.ID, "sf51")
 
-# Convert the memory choice string to an integer (removing "GB" from the end of the string)
-memory_size_min = int(memory_min_choice[:remove_unit])
-memory_size_max = int(memory_max_choice[:remove_unit])
-
 # Define a list of available memory options (in GB)
 memory_options = [4, 8, 12, 16, 20, 24, 32, 40, 64]
 
@@ -145,10 +161,6 @@ for i in range(timesToPressLeftArrowKey_memory):
 
 # This line finds an HTML element on a webpage using its ID attribute and assigns it to the SSD_slider variable
 SSD_slider = driver.find_element(By.ID, "sf57")
-
-# this line converts the last two characters of a string  to an integer and assigns it to the SSD_size variable
-SSD_size_min = int(SSD_min_choice[:remove_unit])
-SSD_size_max = int(SSD_max_choice[:remove_unit])
 
 # This is a list of SSD storage capacity options in GB
 SSD_options = [
@@ -198,9 +210,6 @@ for i in range(timesToPressLeftArrowKey_SSD):
 # The first line finds the slider element using its ID and assigns it to the screen_slider variable.
 screen_slider = driver.find_element(By.ID, "sf211")
 
-# The next two lines extract the min and max screen sizes from the user's input,stored in the screen_choice variable.
-min_screen_size = int(screen_min_choice)
-max_screen_size = int(screen_max_choice)
 
 # The screen_options list contains all the available screen size options in inches.
 # The index of the minimum and maximum screen sizes in this list is calculated to determine how many arrow key presses
@@ -233,8 +242,8 @@ screen_options = [
 ]
 # The next block of code locates the slider handles and uses the ActionChains class from Selenium to perform a series
 # of arrow key presses to set the slider to the desired range.
-timesToPressRightArrowKey_size = screen_options.index(min_screen_size)
-timesToPressLeftArrowKey_size = 23 - screen_options.index(max_screen_size)
+timesToPressRightArrowKey_size = screen_options.index(screen_size_min)
+timesToPressLeftArrowKey_size = 23 - screen_options.index(screen_size_max)
 minhandle_size = screen_slider.find_elements(By.CLASS_NAME, "ui-slider-handle")[0]
 ActionChains(driver).click(minhandle_size).perform()
 for i in range(timesToPressRightArrowKey_size):
